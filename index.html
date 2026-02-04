@@ -152,36 +152,32 @@
     <script>
         (function() {
             const counterEl = document.getElementById('visitor-counter');
+            const counterId = '2401499'; // AmazingCounters ID
             
-            // 使用免費計數器服務
-            const counterId = '8912389';
-            const counterUrl = `https://counter1.freecounter.it/count?c=${counterId}`;
+            // 使用 AmazingCounters API
+            const counterUrl = `https://www.amazingcounters.com/counter-api.php?c=${counterId}&inc=1`;
             
             fetch(counterUrl)
-                .then(res => {
-                    if (!res.ok) throw new Error('Network response was not ok');
-                    return res.json();
-                })
+                .then(res => res.json())
                 .then(data => {
-                    if (data && data.count) {
-                        const countStr = String(data.count).padStart(5, '0');
-                        const digits = counterEl.querySelectorAll('.counter-digit');
-                        digits.forEach((digit, i) => {
-                            digit.textContent = countStr[i] || '0';
-                        });
+                    if (data && data.count !== undefined) {
+                        updateDisplay(data.count);
                     }
                 })
                 .catch(() => {
-                    // 如果免費服務不可用，顯示模擬數據
-                    console.log('計數器服務暫時不可用');
-                    // 隨機顯示一個數字代表「已有人訪問」
-                    const mockCount = Math.floor(Math.random() * 500) + 100;
-                    const countStr = String(mockCount).padStart(5, '0');
-                    const digits = counterEl.querySelectorAll('.counter-digit');
-                    digits.forEach((digit, i) => {
-                        digit.textContent = countStr[i] || '0';
-                    });
+                    // 使用本地儲存（後備方案）
+                    const localCount = parseInt(localStorage.getItem('tarot_count') || '42') + 1;
+                    localStorage.setItem('tarot_count', localCount);
+                    updateDisplay(localCount);
                 });
+            
+            function updateDisplay(count) {
+                const countStr = String(count).padStart(5, '0');
+                const digits = counterEl.querySelectorAll('.counter-digit');
+                digits.forEach((digit, i) => {
+                    digit.textContent = countStr[i] || '0';
+                });
+            }
         })();
     </script>
 </body>
