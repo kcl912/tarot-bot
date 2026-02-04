@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神秘塔羅占卜 | Mystic Tarot</title>
+    <meta name="description" content="免費塔羅牌占卜 - 愛情、事業、財運即時解讀">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <header>
+            <h1>🔮 神秘塔羅</h1>
+            <p class="subtitle">探索命運的指引</p>
+        </header>
+
+        <!-- 首頁：選擇問題類型 -->
+        <section id="home" class="screen active">
+            <h2>你想問什麼？</h2>
+            <div class="question-types">
+                <button class="type-btn" data-type="love" data-emoji="💕">
+                    <span class="emoji">💕</span>
+                    <span>愛情姻緣</span>
+                </button>
+                <button class="type-btn" data-type="career" data-emoji="💼">
+                    <span class="emoji">💼</span>
+                    <span>事業工作</span>
+                </button>
+                <button class="type-btn" data-type="wealth" data-emoji="💰">
+                    <span class="emoji">💰</span>
+                    <span>財運投資</span>
+                </button>
+                <button class="type-btn" data-type="general" data-emoji="✨">
+                    <span class="emoji">✨</span>
+                    <span>整體運勢</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 輸入問題 -->
+        <section id="question" class="screen">
+            <h2>專注你的問題</h2>
+            <p class="hint">在心中默念你想問的問題，然後抽牌</p>
+            <textarea id="user-question" placeholder="可以寫下你的問題（選填）..."></textarea>
+            <button id="draw-btn" class="primary-btn">
+                <span class="btn-text">抽取塔羅牌</span>
+                <span class="btn-icon">🃏</span>
+            </button>
+            <button class="back-btn" onclick="showScreen('home')">← 返回</button>
+        </section>
+
+        <!-- 抽牌動畫 -->
+        <section id="drawing" class="screen">
+            <div class="card-deck">
+                <div class="card-back floating"></div>
+                <div class="card-back floating" style="animation-delay: 0.2s"></div>
+                <div class="card-back floating" style="animation-delay: 0.4s"></div>
+            </div>
+            <p class="drawing-text">牌靈感應中...</p>
+        </section>
+
+        <!-- 結果頁 -->
+        <section id="result" class="screen">
+            <div class="result-card">
+                <div class="card-display">
+                    <div class="tarot-card" id="drawn-card">
+                        <div class="card-inner">
+                            <div class="card-front">
+                                <div class="card-image" id="card-image"></div>
+                                <div class="card-name" id="card-name"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-position" id="card-position"></div>
+                </div>
+                
+                <div class="interpretation">
+                    <h3 id="result-title"></h3>
+                    <div class="reading-content">
+                        <div class="reading-section">
+                            <h4>🔮 牌義解讀</h4>
+                            <p id="card-meaning"></p>
+                        </div>
+                        <div class="reading-section">
+                            <h4>💫 對你的啟示</h4>
+                            <p id="card-advice"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <p class="cta-text">想要更深入的解讀？</p>
+                <button class="premium-btn" onclick="showPremium()">
+                    ✨ 獲取完整三牌陣分析 - $38
+                </button>
+            </div>
+
+            <button class="restart-btn" onclick="restart()">🔄 重新占卜</button>
+        </section>
+
+        <!-- 付費提示 -->
+        <section id="premium" class="screen">
+            <div class="premium-card">
+                <h2>✨ 完整塔羅解讀</h2>
+                <div class="premium-options">
+                    <div class="option">
+                        <h3>三牌陣</h3>
+                        <p>過去・現在・未來</p>
+                        <span class="price">$38</span>
+                    </div>
+                    <div class="option featured">
+                        <div class="badge">最受歡迎</div>
+                        <h3>凱爾特十字</h3>
+                        <p>深度全面分析</p>
+                        <span class="price">$88</span>
+                    </div>
+                    <div class="option">
+                        <h3>愛情專屬</h3>
+                        <p>關係七牌陣</p>
+                        <span class="price">$68</span>
+                    </div>
+                </div>
+                <p class="payment-hint">付款後即時獲得 AI 語音解讀</p>
+                <button class="back-btn" onclick="showScreen('result')">← 返回結果</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="tarot-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
