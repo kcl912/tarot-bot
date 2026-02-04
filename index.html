@@ -150,44 +150,49 @@
 
     <!-- Visitor Counter Script -->
     <script>
+        // 使用 countapi.xyz 計數器
         (function() {
             const counterEl = document.getElementById('visitor-counter');
-            const namespace = 'tarot-bot-kcl912';
-            const key = 'visitors';
+            const namespace = 'tarot-bot-001';
+            const key = 'views';
             
-            // Try to get existing count
-            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-                .then(res => res.json())
-                .then(data => {
-                    updateCounter(data.value);
-                    // Increment count
-                    return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
-                })
-                .catch(() => {
-                    // If namespace doesn't exist, create it
-                    return fetch('https://api.countapi.xyz/create', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            namespace: namespace,
-                            key: key,
-                            enable_reset: true
-                        })
-                    }).then(res => res.json())
-                      .then(data => {
-                          updateCounter(data.value);
-                          // Hit the counter
-                          return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
-                      });
-                });
-            
-            function updateCounter(count) {
-                const countStr = count.toString().padStart(5, '0');
+            function updateDisplay(count) {
+                const countStr = String(count).padStart(5, '0');
                 const digits = counterEl.querySelectorAll('.counter-digit');
                 digits.forEach((digit, i) => {
                     digit.textContent = countStr[i] || '0';
                 });
             }
+            
+            // 初始化計數器
+            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                .then(res => res.json())
+                .then(data => {
+                    updateDisplay(data.value);
+                    // 增加計數
+                    return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                })
+                .catch(() => {
+                    // 創建新的計數器
+                    fetch('https://api.countapi.xyz/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            namespace: namespace,
+                            key: key,
+                            enable_reset: false
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        updateDisplay(data.value);
+                        return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                    })
+                    .catch(err => {
+                        console.log('計數器連接失敗，顯示初始值');
+                        updateDisplay(1);
+                    });
+                });
         })();
     </script>
 </body>
