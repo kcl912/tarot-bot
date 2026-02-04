@@ -133,6 +133,19 @@
     <script src="tarot-data.js"></script>
     <script src="app.js"></script>
     
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script>
+        var host = window.location.hostname;
+        var pathname = window.location.pathname;
+        var script = document.createElement('script');
+        script.defer = true;
+        script.src = '/_vercel/insights/script.js?host=' + host + '&path=' + pathname;
+        document.head.appendChild(script);
+    </script>
+    
     <!-- Footer with Visitor Counter -->
     <footer class="site-footer">
         <div class="counter-container">
