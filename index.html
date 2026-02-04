@@ -152,24 +152,8 @@
     <script>
         (function() {
             const counterEl = document.getElementById('visitor-counter');
-            const counterId = '2401499'; // AmazingCounters ID
-            
-            // 使用 AmazingCounters API
-            const counterUrl = `https://www.amazingcounters.com/counter-api.php?c=${counterId}&inc=1`;
-            
-            fetch(counterUrl)
-                .then(res => res.json())
-                .then(data => {
-                    if (data && data.count !== undefined) {
-                        updateDisplay(data.count);
-                    }
-                })
-                .catch(() => {
-                    // 使用本地儲存（後備方案）
-                    const localCount = parseInt(localStorage.getItem('tarot_count') || '42') + 1;
-                    localStorage.setItem('tarot_count', localCount);
-                    updateDisplay(localCount);
-                });
+            const namespace = 'tarot-kcl912';
+            const key = 'hits';
             
             function updateDisplay(count) {
                 const countStr = String(count).padStart(5, '0');
@@ -178,6 +162,38 @@
                     digit.textContent = countStr[i] || '0';
                 });
             }
+            
+            // 使用 CountAPI 服務
+            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                .then(res => res.json())
+                .then(data => {
+                    updateDisplay(data.value);
+                    // 增加計數
+                    return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                })
+                .catch(() => {
+                    // 創建新計數器
+                    fetch('https://api.countapi.xyz/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            namespace: namespace,
+                            key: key,
+                            enable_reset: false
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        updateDisplay(data.value);
+                        return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                    })
+                    .catch(() => {
+                        // 使用本地後備
+                        const localCount = parseInt(localStorage.getItem('tarot_views') || '88') + 1;
+                        localStorage.setItem('tarot_views', localCount);
+                        updateDisplay(localCount);
+                    });
+                });
         })();
     </script>
 </body>
