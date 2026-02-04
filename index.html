@@ -132,5 +132,63 @@
 
     <script src="tarot-data.js"></script>
     <script src="app.js"></script>
+    
+    <!-- Footer with Visitor Counter -->
+    <footer class="site-footer">
+        <div class="counter-container">
+            <span class="counter-label">👁️ 瀏覽人次</span>
+            <div id="visitor-counter" class="counter-display">
+                <span class="counter-digit">0</span>
+                <span class="counter-digit">0</span>
+                <span class="counter-digit">0</span>
+                <span class="counter-digit">0</span>
+                <span class="counter-digit">0</span>
+            </div>
+        </div>
+        <p class="footer-text">神秘塔羅占卜 © 2025 | Made with 🔮</p>
+    </footer>
+
+    <!-- Visitor Counter Script -->
+    <script>
+        (function() {
+            const counterEl = document.getElementById('visitor-counter');
+            const namespace = 'tarot-bot-kcl912';
+            const key = 'visitors';
+            
+            // Try to get existing count
+            fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                .then(res => res.json())
+                .then(data => {
+                    updateCounter(data.value);
+                    // Increment count
+                    return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                })
+                .catch(() => {
+                    // If namespace doesn't exist, create it
+                    return fetch('https://api.countapi.xyz/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            namespace: namespace,
+                            key: key,
+                            enable_reset: true
+                        })
+                    }).then(res => res.json())
+                      .then(data => {
+                          updateCounter(data.value);
+                          // Hit the counter
+                          return fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+                      });
+                });
+            
+            function updateCounter(count) {
+                const countStr = count.toString().padStart(5, '0');
+                const digits = counterEl.querySelectorAll('.counter-digit');
+                digits.forEach((digit, i) => {
+                    digit.textContent = countStr[i] || '0';
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
